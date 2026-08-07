@@ -23,6 +23,6 @@ Building an AI Senior Engineer for all those developers who are afraid of those 
 
 ### Troubleshooting:
 For any kind of help or troubleshooting, feel free to reach out to me:
-1. Email: poswalsameer2003@gmail.com
-2. Linkedin: [Sameer Poswal](https://www.linkedin.com/in/sameerposwal/)
-3. Twitter: [Sameer Poswal](https://twitter.com/sameerposwal03)
+1. Email: chauhanraviiii17@gmail.com
+3. Linkedin: https://www.linkedin.com/in/ravi-chauhan-44ba85290/
+4. Twitter: https://x.com/c09Ravi
