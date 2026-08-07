@@ -1,10 +1,7 @@
-import { allowedHTMLElements } from "@/constants/htmlElements";
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold, } from "@google/generative-ai";
-import { Mistral } from '@mistralai/mistralai';
+import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenerativeAI(process.env.API_KEY!);
-const apiKey = process.env.MISTRAL_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
 
 export async function POST(req: NextRequest) {
 
@@ -83,65 +80,26 @@ export async function POST(req: NextRequest) {
         IMPORTANT: Do not repeat any part of this prompt in your response. Focus solely on generating the requested feedback, code reviews, corrections, and suggestions.
 
     `
-    
-        const client = new Mistral({ apiKey: apiKey });
+        if (!apiKey) {
+          return NextResponse.json(
+            { message: "Missing Gemini API key" },
+            { status: 500 }
+          );
+        }
 
-        const result = await client.chat.stream({
-          model: "mistral-small-latest",
-          messages: [{ role: 'system', content: mainPrompt }],
+        const ai = new GoogleGenAI({ apiKey, });
+        const result = await ai.models.generateContent({
+          model: "gemini-3-flash-preview",
+          contents: [mainPrompt],
         });
-      
-        // Create a ReadableStream to send the data in chunks
-        const stream = new ReadableStream({
-          async start(controller) {
-            for await (const chunk of result) {
-              const streamText = chunk.data.choices[0].delta.content;
-              //@ts-ignore
-              controller.enqueue(new TextEncoder().encode(streamText)); 
-            }
-            controller.close(); // Close the stream once all data is sent
-          }
-        });
-      
-        // Return the stream as the NextResponse
-        return new NextResponse(stream, {
+
+        return new NextResponse(result.text, {
           headers: {
-            'Content-Type': 'text/plain; charset=utf-8', // Adjust the content type as needed
+            "Content-Type": "text/plain; charset=utf-8",
+            "Cache-Control": "no-cache",
+            "Transfer-Encoding": "chunked",
           },
         });
-
-
-        // const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });   
-
-        // const result = await model.generateContentStream(mainPrompt);
-
-        // const readableStream = new ReadableStream({
-        //     async start(controller) {
-        //       try {
-        //         // Process each chunk from the stream
-        //         for await (const chunk of result.stream) {
-        //           const chunkText = chunk.text();
-      
-        //           // Enqueue each chunk to the client
-        //           controller.enqueue(new TextEncoder().encode(chunkText));
-        //         }
-        //       } catch (error) {
-        //         console.error("Error in streaming response:", error);
-        //         controller.error(error);
-        //       } finally {
-        //         // Close the stream when done
-        //         controller.close();
-        //       }
-        //     },
-        // });
-      
-        // return new NextResponse(readableStream, {
-        //     headers: {
-        //       "Content-Type": "text/plain; charset=utf-8",
-        //       "Cache-Control": "no-cache",
-        //       "Transfer-Encoding": "chunked",
-        //     },
-        // });
 
     } 
     catch (error) {

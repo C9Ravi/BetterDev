@@ -23,7 +23,6 @@ export default function Home() {
       
       <Navbar />
 
-      {/* HERO SECTION */}
       <main 
         className=" 
           mt-6 h-screen max-w-7xl flex items-center container mx-auto px-6  
@@ -73,36 +72,18 @@ export default function Home() {
           </div>
           <div 
             className="
-              mb-10 w-full max-w-xl  
+             w-full max-w-xl  
               sm:mb-10 sm:w-full sm:max-w-xl
               md:mb-10 md:w-full md:max-w-xl">
             <CodePreview />
           </div>
-          <div 
-            className="
-              flex items-center  
-              sm:flex sm:items-center
-              md:flex md:items-center">
-              <p className="text-gray-400">
-                Trusted by
-                {" "}<span className="text-[#7C3AED] font-bold">5,000+</span>{" "}
-                developers
-              </p>
-            </div>
         </div>
       </main>
 
-      {/* FEATURES SECTION */}
       <FeatureSection />
 
       {/* HOW IT WORKS */}
       <HowItWorks />
-
-      {/* PRICING SECTION */}
-      <PricingSection />
-
-      {/* TESTIMONIALS SECTION */}
-      <TestimonialsSection />
 
       {/* FOOTER */}
       <Footer />
